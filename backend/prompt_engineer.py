@@ -1,6 +1,6 @@
 TEMPLATES = {
     'analysis': {
-        'system-role': "act as a senior business analyst with expertise in market intelligence and company.",
+        'system_role': "act as a senior business analyst with expertise in market intelligence and company.",
         'structure': """{
             'overview': 'text',
             'competitors': [

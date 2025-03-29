@@ -1,16 +1,13 @@
 from flask import Blueprint, request, jsonify
-from .gemini_client import GeminiClient
+from .gemini import GeminiClient
 from .prompt_engineer import PromptBuilder
 from .validation import ResponseValidator
-from flask_limiter import Limiter
 
-bp = Blueprint('main', __name__)
-# limiter = Limiter(key_func=get_remote_address)
+bp = Blueprint('main', __name__)  
 
 client = GeminiClient()
 
 @bp.route('/analyze', methods=['POST'])
-# @limiter.limit("10/minute")
 def analyze():
     # Input validation
     data = request.get_json()
@@ -32,10 +29,10 @@ def analyze():
 
     try:
         # Build and execute prompt
-        prompt = PromptBuilder.build_prompt(query_type, params)
+        prompt = PromptBuilder.create_prompt(query_type, params)
         gemini_response = client.generate_insights(prompt)
         
-        if gemini_response["error"]:
+        if gemini_response.get("error"):
             raise RuntimeError(gemini_response["error"])
             
         # Validate and process response
